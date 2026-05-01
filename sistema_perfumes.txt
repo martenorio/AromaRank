@@ -1,0 +1,114 @@
+SISTEMA DE CLASIFICACIÓN DE PERFUMES BASADO EN GRAFOS
+
+1.  ENFOQUE GENERAL El sistema se basa en un modelo flexible usando
+    grafos donde:
+
+-   Los perfumes son entidades principales
+-   Los tags representan características
+-   Las relaciones conectan perfumes con tags
+
+Esto permite múltiples relaciones cruzadas sin limitaciones jerárquicas.
+
+------------------------------------------------------------------------
+
+2.  ENTIDADES PRINCIPALES
+
+Perfume: - id - nombre - marca
+
+Tags: - id - nombre - tipo (nota, familia, ocasión, estilo, etc.)
+
+Relación Perfume-Tag: - perfume_id - tag_id - tipo - nivel (top, middle,
+base) [solo para notas] - peso (opcional)
+
+------------------------------------------------------------------------
+
+3.  TIPOS DE TAGS
+
+-   Notas (vainilla, cítrico, madera)
+-   Familia olfativa (cálido, fresco, oriental)
+-   Ocasión (noche, oficina, verano)
+-   Estilo (elegante, deportivo)
+-   Género (opcional)
+-   Temporada
+
+------------------------------------------------------------------------
+
+4.  NOTAS POR NIVEL
+
+-   Top (salida): primeras impresiones
+-   Middle (corazón): identidad principal
+-   Base (fondo): duración
+
+Esto permite búsquedas más avanzadas y diferenciadas.
+
+------------------------------------------------------------------------
+
+5.  BASE DE DATOS (SQL)
+
+Perfumes - id - nombre - marca
+
+Tags - id - nombre - tipo
+
+PerfumeTag - perfume_id - tag_id - nivel (nullable) - peso (opcional)
+
+------------------------------------------------------------------------
+
+6.  MODELO DE GRAFO
+
+-   Nodo: Perfume
+-   Nodo: Tag
+-   Arista: Relación entre ambos
+
+------------------------------------------------------------------------
+
+7.  SIMILITUD AUTOMÁTICA
+
+Método base: Jaccard Similarity
+
+similitud = intersección / unión
+
+Ejemplo: Perfume A = [vainilla, madera, cálido, noche] Perfume B =
+[vainilla, ámbar, cálido, formal]
+
+Intersección: 2 Unión: 6 Resultado: 0.33
+
+Mejoras posibles: - Mayor peso a notas base - Mayor peso a familia
+olfativa
+
+------------------------------------------------------------------------
+
+8.  VISUALIZACIÓN
+
+Recomendado: - Grafo interactivo - Filtros dinámicos - Mostrar solo
+nodos relacionados
+
+Evitar: - Mostrar todo el grafo al mismo tiempo
+
+------------------------------------------------------------------------
+
+9.  ROADMAP
+
+Fase 1: - CRUD perfumes - CRUD tags - Relaciones básicas
+
+Fase 2: - Notas por nivel - Filtros
+
+Fase 3: - Similitud automática - Recomendaciones
+
+Fase 4: - Exploración visual tipo grafo
+
+------------------------------------------------------------------------
+
+10. IDEA AVANZADA
+
+Perfil olfativo del usuario: - Guardar preferencias - Generar
+recomendaciones personalizadas
+
+------------------------------------------------------------------------
+
+CONCLUSIÓN
+
+El sistema es: - Flexible - Escalable - Orientado a descubrimiento
+inteligente
+
+Permite evolucionar de una simple clasificación a un sistema de
+recomendación avanzado.

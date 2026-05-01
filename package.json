@@ -1,0 +1,19 @@
+{
+  "name": "graph-3d-fragrance",
+  "version": "1.0.0",
+  "description": "Visualizador 3D de perfumes en grafo interactivo con Three.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "threejs",
+    "3d",
+    "perfumes",
+    "graph",
+    "visualization"
+  ],
+  "author": "",
+  "license": "MIT"
+}

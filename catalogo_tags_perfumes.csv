@@ -1,0 +1,184 @@
+tipo,nombre,subtipo
+
+# ===== NOTAS =====
+nota,bergamota,citrico
+nota,limon,citrico
+nota,lima,citrico
+nota,naranja,citrico
+nota,mandarina,citrico
+nota,toronja,citrico
+
+nota,manzana,frutal
+nota,pera,frutal
+nota,pina,frutal
+nota,cereza,frutal
+nota,ciruela,frutal
+nota,durazno,frutal
+nota,frambuesa,frutal
+nota,fresa,frutal
+nota,grosella negra,frutal
+nota,maracuya,frutal
+
+nota,rosa,floral
+nota,jazmin,floral
+nota,lavanda,floral
+nota,azahar,floral
+nota,ylang-ylang,floral
+nota,violeta,floral
+nota,iris,floral
+nota,magnolia,floral
+nota,gardenia,floral
+nota,tuberosa,floral
+
+nota,sandalo,madera
+nota,cedro,madera
+nota,vetiver,madera
+nota,oud,madera
+nota,madera de guayaco,madera
+nota,cashmere wood,madera
+
+nota,vainilla,gourmand
+nota,caramelo,gourmand
+nota,chocolate,gourmand
+nota,miel,gourmand
+nota,praline,gourmand
+nota,haba tonka,gourmand
+nota,leche,gourmand
+nota,cafe,gourmand
+
+nota,canela,especia
+nota,cardamomo,especia
+nota,pimienta,especia
+nota,nuez moscada,especia
+nota,clavo,especia
+nota,jengibre,especia
+nota,azafran,especia
+
+nota,menta,verde
+nota,romero,verde
+nota,albahaca,verde
+nota,te verde,verde
+nota,hierba,verde
+
+nota,ambar,resina
+nota,incienso,resina
+nota,mirra,resina
+nota,benjui,resina
+nota,labdanum,resina
+
+nota,almizcle,animalico
+nota,cuero,animalico
+nota,tabaco,animalico
+nota,humo,animalico
+
+nota,notas marinas,acuatico
+nota,calone,acuatico
+nota,ozonico,acuatico
+
+nota,ambroxan,sintetico
+nota,iso e super,sintetico
+nota,aldehidos,sintetico
+nota,cashmeran,sintetico
+nota,musk sintetico,sintetico
+
+# ===== FAMILIA =====
+familia,calido,olfativo
+familia,fresco,olfativo
+familia,oriental,olfativo
+familia,amaderado,olfativo
+familia,floral,olfativo
+familia,citrico,olfativo
+familia,gourmand,olfativo
+familia,acuatico,olfativo
+familia,verde,olfativo
+
+# ===== OCASION =====
+ocasion,diario,uso
+ocasion,oficina,uso
+ocasion,noche,uso
+ocasion,formal,uso
+ocasion,casual,uso
+ocasion,cita,uso
+ocasion,fiesta,uso
+ocasion,deporte,uso
+
+# ===== ESTILO =====
+estilo,elegante,vibe
+estilo,sexy,vibe
+estilo,deportivo,vibe
+estilo,juvenil,vibe
+estilo,sofisticado,vibe
+estilo,misterioso,vibe
+estilo,clasico,vibe
+estilo,moderno,vibe
+
+# ===== TEMPORADA =====
+temporada,verano,clima
+temporada,invierno,clima
+temporada,otono,clima
+temporada,primavera,clima
+
+# ===== GENERO =====
+genero,masculino,clasificacion
+genero,femenino,clasificacion
+genero,unisex,clasificacion
+
+# ===== INTENSIDAD =====
+intensidad,suave,nivel
+intensidad,moderado,nivel
+intensidad,intenso,nivel
+
+# ===== DURACION =====
+duracion,corta,tiempo
+duracion,media,tiempo
+duracion,larga,tiempo
+
+# ===== PROYECCION =====
+proyeccion,baja,alcance
+proyeccion,media,alcance
+proyeccion,alta,alcance
+
+# ===== SENSACION =====
+sensacion,dulce,perfil
+sensacion,seco,perfil
+sensacion,fresco,perfil
+sensacion,verde,perfil
+sensacion,picante,perfil
+sensacion,cremoso,perfil
+sensacion,afrutado,perfil
+
+# ===== TIPO FRAGANCIA =====
+tipo_fragancia,eau de toilette,concentracion
+tipo_fragancia,eau de parfum,concentracion
+tipo_fragancia,parfum,concentracion
+
+# ===== ORIGEN =====
+origen,arabe,region
+origen,frances,region
+origen,italiano,region
+origen,tropical,region
+origen,americano,region
+
+# ===== ACORDES =====
+acorde,amaderado dulce,combinacion
+acorde,citrico aromatico,combinacion
+acorde,oriental especiado,combinacion
+acorde,floral afrutado,combinacion
+
+# ===== MOOD =====
+mood,energetico,emocion
+mood,relajante,emocion
+mood,romantico,emocion
+mood,poderoso,emocion
+mood,refrescante,emocion
+
+# ===== MOMENTO =====
+momento,dia,tiempo
+momento,tarde,tiempo
+momento,noche,tiempo
+
+# ===== PERFIL =====
+perfil,joven,usuario
+perfil,adulto,usuario
+perfil,profesional,usuario
+perfil,clasico,usuario

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph 3D Fragrance - Visualizador de Perfumes</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1>Fragrance Graph</h1>
+                <p>Explorador de Perfumes</p>
+            </div>
+
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Buscar perfume o marca..." />
+                    <span class="search-icon">🔍</span>
+                </div>
+            </div>
+
+            <div class="filters-container" id="filters-container">
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="rating">
+                        <span class="rating-label">Rating</span>
+                        <span class="filter-badge" id="badge-rating" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-rating"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="familia">
+                        Familia
+                        <span class="filter-badge" id="badge-familia" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-familia"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="ocasion">
+                        Ocasión
+                        <span class="filter-badge" id="badge-ocasion" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-ocasion"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="estilo">
+                        Estilo
+                        <span class="filter-badge" id="badge-estilo" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-estilo"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="genero">
+                        Género
+                        <span class="filter-badge" id="badge-genero" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-genero"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="temporada">
+                        Temporada
+                        <span class="filter-badge" id="badge-temporada" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-temporada"></div>
+                </div>
+
+                <div class="filter-group">
+                    <button class="filter-toggle" data-filter="notas">
+                        Tipo de Nota
+                        <span class="filter-badge" id="badge-notas" hidden></span>
+                    </button>
+                    <div class="filter-options" id="options-notas"></div>
+                </div>
+
+                <button id="clear-filters" class="clear-filters hidden">Limpiar filtros</button>
+            </div>
+
+            <div class="nav-section">
+                <div class="perfume-list-header">
+                    <h2>Perfumes (<span id="perfume-count">0</span>)</h2>
+                </div>
+                <ul id="perfume-list" class="perfume-list"></ul>
+                <div id="no-results" class="no-results hidden">No se encontraron perfumes</div>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div id="canvas-container"></div>
+
+            <div id="cascade-menu" class="cascade-menu hidden">
+                <div class="cascade-header">
+                    <button id="close-cascade" class="close-cascade-btn">×</button>
+                    <span id="cascade-perfume-name"></span>
+                </div>
+                <div id="cascade-content" class="cascade-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="data/perfumes.js"></script>
+    <script src="src/scene.js"></script>
+    <script src="src/cascade.js"></script>
+    <script src="src/app.js"></script>
+</body>
+</html>
