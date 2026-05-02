@@ -101,6 +101,22 @@
                 <div class="dashboard-quick-stats" id="dashboard-quick-stats"></div>
             </div>
 
+            <div class="mobile-perfume-card" id="mobile-perfume-card">
+                <div class="mobile-perfume-card__content">
+                    <img src="" alt="" class="mobile-perfume-card__image" id="mobile-perfume-image" />
+                    <div class="mobile-perfume-card__info">
+                        <div class="mobile-perfume-card__header">
+                            <h3 class="mobile-perfume-card__name" id="mobile-perfume-name"></h3>
+                            <div class="mobile-perfume-card__rating" id="mobile-perfume-rating"></div>
+                        </div>
+                        <p class="mobile-perfume-card__brand" id="mobile-perfume-brand"></p>
+                        <p class="mobile-perfume-card__desc" id="mobile-perfume-desc"></p>
+                        <div class="mobile-perfume-card__tags" id="mobile-perfume-tags"></div>
+                    </div>
+                </div>
+                <div class="mobile-perfume-card__stats" id="mobile-perfume-stats"></div>
+            </div>
+
             <div class="dashboard-grid">
                 <div class="dashboard-row">
                     <div class="chart-card chart-card--radar">
@@ -134,9 +150,16 @@
                         <div id="chart-3d-container" class="chart-container chart-container--3d"></div>
                     </div>
                     <div class="chart-card chart-card--recommender">
-                        <div class="chart-card__title">Recomendador Visual</div>
-                        <div class="recommender-subtitle">Perfumes similares basados en perfil olfativo</div>
-                        <div id="chart-recommender" class="chart-container chart-container--recommender"></div>
+                        <div class="chart-card__title">Top 10 Similares</div>
+                        <div class="recommender-subtitle">Fragancias parecidas basadas en perfil, ranking, familia y género</div>
+                        <div class="recommender-carousel">
+                            <button class="carousel-btn carousel-btn--prev" id="carousel-prev" title="Anterior">❮</button>
+                            <div class="carousel-track-container">
+                                <div class="carousel-track" id="carousel-track"></div>
+                            </div>
+                            <button class="carousel-btn carousel-btn--next" id="carousel-next" title="Siguiente">❯</button>
+                        </div>
+                        <div class="carousel-dots" id="carousel-dots"></div>
                     </div>
                 </div>
             </div>

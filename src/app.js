@@ -251,6 +251,7 @@ function selectPerfume(id) {
     state.scene.renderPerfumeGraph(perfume);
     Dashboard.update(perfume);
     updateQuickStats(perfume);
+    updateMobilePerfumeCard(perfume);
     InfoPanel.update(perfume);
     updateDashboardBgColor(perfume);
 }
@@ -265,6 +266,35 @@ function updateQuickStats(perfume) {
         <div class="quick-stat"><span class="quick-stat__label">Rating</span><span class="quick-stat__value">${perfume.rating}★</span></div>
         <div class="quick-stat"><span class="quick-stat__label">Dominante</span><span class="quick-stat__value">${dominant[0]}</span></div>
         <div class="quick-stat"><span class="quick-stat__label">Notas</span><span class="quick-stat__value">${perfume.notas.length}</span></div>
+    `;
+}
+
+function updateMobilePerfumeCard(perfume) {
+    const image = document.getElementById('mobile-perfume-image');
+    const name = document.getElementById('mobile-perfume-name');
+    const brand = document.getElementById('mobile-perfume-brand');
+    const desc = document.getElementById('mobile-perfume-desc');
+    const tags = document.getElementById('mobile-perfume-tags');
+    const stats = document.getElementById('mobile-perfume-stats');
+
+    image.src = perfume.imagen;
+    image.alt = perfume.nombre;
+    name.textContent = perfume.nombre;
+    brand.textContent = `${perfume.marca} · ${perfume.year}`;
+    desc.textContent = perfume.description;
+
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) starsHtml += `<span class="star ${i > perfume.rating ? 'empty' : ''}">★</span>`;
+    document.getElementById('mobile-perfume-rating').innerHTML = starsHtml;
+
+    const tagList = [perfume.familia, perfume.genero, ...perfume.ocasion.slice(0, 2)];
+    tags.innerHTML = tagList.map(t => `<span class="mobile-perfume-card__tag">${t}</span>`).join('');
+
+    stats.innerHTML = `
+        <div class="mobile-perfume-card__stat"><span class="mobile-perfume-card__stat-label">Longevidad</span><span class="mobile-perfume-card__stat-value">${perfume.longevidad}</span></div>
+        <div class="mobile-perfume-card__stat"><span class="mobile-perfume-card__stat-label">Proyección</span><span class="mobile-perfume-card__stat-value">${perfume.proyeccion}</span></div>
+        <div class="mobile-perfume-card__stat"><span class="mobile-perfume-card__stat-label">Concentración</span><span class="mobile-perfume-card__stat-value">${perfume.concentracion}</span></div>
+        <div class="mobile-perfume-card__stat"><span class="mobile-perfume-card__stat-label">Notas</span><span class="mobile-perfume-card__stat-value">${perfume.notas.length}</span></div>
     `;
 }
 
@@ -302,7 +332,7 @@ function updateDashboardBgColor(perfume) {
 
     const tintOpacity = 0.04;
     const mainBg = `rgba(${mixedR}, ${mixedG}, ${mixedB}, ${tintOpacity})`;
-    const cardBg = `rgba(${mixedR}, ${mixedG}, ${mixedB}, 0.03)`;
+    const cardBg = `rgba(${mixedR}, ${mixedG}, ${mixedB}, 0.09)`;
     const cardBorder = `rgba(${mixedR}, ${mixedG}, ${mixedB}, 0.1)`;
 
     const mainContent = document.getElementById('main-content');

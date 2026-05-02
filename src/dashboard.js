@@ -16,7 +16,6 @@ const Dashboard = {
         this.charts.treemap = echarts.init(document.getElementById('chart-treemap'), 'dark');
         this.charts.timeline = echarts.init(document.getElementById('chart-timeline'), 'dark');
         this.charts.scatter = echarts.init(document.getElementById('chart-scatter'), 'dark');
-        this.charts.recommender = echarts.init(document.getElementById('chart-recommender'), 'dark');
 
         window.addEventListener('resize', () => {
             Object.values(this.charts).forEach(c => c.resize());
@@ -264,13 +263,12 @@ const Dashboard = {
     },
 
     /**
-     * Gráfico 6: Recomendador visual
-     * Calcula similitud de coseno entre vectores de perfil
-     * Muestra los perfumes más similares al seleccionado
+     * Gráfico 6: Recomendador visual - Top 10 cards en carrusel
+     * Calcula similitud combinando vector perfil, rating, familia y género
      */
     updateRecommender(perfume) {
         const v1 = perfume.vectorPerfil;
-        const similarity = (a, b) => {
+        const cosineSimilarity = (a, b) => {
             const dot = a.frescura * b.frescura + a.dulzura * b.dulzura + a.calidez * b.calidez + a.intensidad * b.intensidad;
             const magA = Math.sqrt(a.frescura ** 2 + a.dulzura ** 2 + a.calidez ** 2 + a.intensidad ** 2);
             const magB = Math.sqrt(b.frescura ** 2 + b.dulzura ** 2 + b.calidez ** 2 + b.intensidad ** 2);
@@ -279,73 +277,76 @@ const Dashboard = {
 
         const scores = PERFUMES
             .filter(p => p.id !== perfume.id)
-            .map(p => ({ ...p, simScore: similarity(v1, p.vectorPerfil) }))
+            .map(p => {
+                const vectorSim = cosineSimilarity(v1, p.vectorPerfil);
+                const familyBonus = p.familia === perfume.familia ? 0.15 : 0;
+                const genderBonus = p.genero === perfume.genero ? 0.1 : (p.genero === 'unisex' || perfume.genero === 'unisex' ? 0.05 : 0);
+                const ratingFactor = (p.rating / 5) * 0.1;
+                const combinedScore = (vectorSim * 0.6) + familyBonus + genderBonus + ratingFactor;
+                return { ...p, simScore: Math.min(1, combinedScore) };
+            })
             .sort((a, b) => b.simScore - a.simScore)
-            .slice(0, 8);
+            .slice(0, 10);
 
-        const names = scores.map(p => p.nombre);
-        const simValues = scores.map(p => Math.round(p.simScore * 100));
-        const ratingColors = scores.map(p => {
-            if (p.simScore > 0.9) return '#4ECB71';
-            if (p.simScore > 0.8) return '#FFD700';
-            if (p.simScore > 0.7) return '#FF8C00';
-            return '#FF6B6B';
+        const track = document.getElementById('carousel-track');
+        const dotsContainer = document.getElementById('carousel-dots');
+
+        track.innerHTML = scores.map((p, i) => `
+            <div class="recommender-card" data-id="${p.id}">
+                <img src="${p.imagen}" alt="${p.nombre}" class="recommender-card__image" loading="lazy" />
+                <div class="recommender-card__content">
+                    <div class="recommender-card__rank">#${i + 1} Similar</div>
+                    <div class="recommender-card__name">${p.nombre}</div>
+                    <div class="recommender-card__brand">${p.marca}</div>
+                    <div class="recommender-card__meta">
+                        <span class="recommender-card__rating">${p.rating}★</span>
+                        <span class="recommender-card__similarity">${Math.round(p.simScore * 100)}%</span>
+                    </div>
+                    <div class="recommender-card__tags">
+                        <span class="recommender-card__tag">${p.familia}</span>
+                        <span class="recommender-card__tag">${p.genero}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        track.querySelectorAll('.recommender-card').forEach(card => {
+            card.addEventListener('click', () => {
+                window.selectPerfume && window.selectPerfume(parseInt(card.dataset.id));
+            });
         });
 
-        // Bar chart horizontal con detalles
-        const barSeriesData = scores.map((p, i) => ({
-            value: simValues[i],
-            itemStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                    { offset: 0, color: ratingColors[i] },
-                    { offset: 1, color: ratingColors[i] + '88' }
-                ])
-            }
-        }));
+        const cardWidth = 150;
+        const containerWidth = track.parentElement.clientWidth;
+        const visibleCards = Math.floor(containerWidth / cardWidth);
+        const totalPages = Math.ceil(scores.length / visibleCards);
+        let currentPage = 0;
 
-        this.charts.recommender.setOption({
-            backgroundColor: 'transparent',
-            tooltip: {
-                trigger: 'axis', axisPointer: { type: 'shadow' },
-                formatter: (params) => {
-                    const idx = params[0].dataIndex;
-                    const p = scores[idx];
-                    return `<b>${p.nombre}</b> (${p.marca})<br/>Similitud: ${simValues[idx]}%<br/>Rating: ${p.rating}★<br/>Familia: ${p.familia}<br/>Género: ${p.genero}`;
-                }
-            },
-            grid: { top: 10, bottom: 10, left: 110, right: 40 },
-            xAxis: { type: 'value', max: 100, axisLabel: { color: '#666', formatter: '{value}%' }, splitLine: { lineStyle: { color: '#1a1a2e' } } },
-            yAxis: {
-                type: 'category', data: names.reverse(),
-                axisLabel: { color: '#ccc', fontSize: 10 },
-                axisLine: { show: false }, axisTick: { show: false }
-            },
-            series: [{
-                type: 'bar', data: barSeriesData.reverse(), barWidth: 16,
-                label: {
-                    show: true, position: 'right', color: '#ccc', fontSize: 10,
-                    formatter: '{c}%'
-                },
-                itemStyle: { borderRadius: [0, 4, 4, 0] }
-            }],
-            graphic: scores.map((p, i) => ({
-                type: 'text',
-                left: names.length > 0 ? undefined : 0,
-                right: 8,
-                top: 15 + i * 32,
-                style: { text: `${p.rating}★`, fill: '#8888aa', fontSize: 10 }
-            }))
-        }, true);
-
-        // Click en barra para cambiar perfume
-        this.charts.recommender.off('click');
-        this.charts.recommender.on('click', (params) => {
-            const idx = names.length - 1 - params.dataIndex;
-            const recommended = scores[idx];
-            if (recommended) {
-                window.selectPerfume && window.selectPerfume(recommended.id);
+        function updateCarousel() {
+            const offset = currentPage * visibleCards * cardWidth;
+            track.style.transform = `translateX(-${offset}px)`;
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalPages; i++) {
+                const dot = document.createElement('div');
+                dot.className = `carousel-dot${i === currentPage ? ' active' : ''}`;
+                dot.addEventListener('click', () => {
+                    currentPage = i;
+                    updateCarousel();
+                });
+                dotsContainer.appendChild(dot);
             }
-        });
+            document.getElementById('carousel-prev').disabled = currentPage === 0;
+            document.getElementById('carousel-next').disabled = currentPage >= totalPages - 1;
+        }
+
+        document.getElementById('carousel-prev').onclick = () => {
+            if (currentPage > 0) { currentPage--; updateCarousel(); }
+        };
+        document.getElementById('carousel-next').onclick = () => {
+            if (currentPage < totalPages - 1) { currentPage++; updateCarousel(); }
+        };
+
+        updateCarousel();
     },
 
     /**
