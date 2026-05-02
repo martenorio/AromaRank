@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graph 3D Fragrance - Visualizador de Perfumes</title>
+    <title>Fragrance Graph 3D - Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <button class="mobile-toggle" id="toggle-sidebar" title="Menú">☰</button>
+
     <div class="app-container">
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar__close" id="close-sidebar">×</div>
             <div class="sidebar-header">
                 <h1>Fragrance Graph</h1>
                 <p>Explorador de Perfumes</p>
@@ -16,7 +19,7 @@
 
             <div class="search-section">
                 <div class="search-box">
-                    <input type="text" id="search-input" placeholder="Buscar perfume o marca..." />
+                    <input type="text" id="search-input" placeholder="Buscar..." />
                     <span class="search-icon">🔍</span>
                 </div>
             </div>
@@ -29,55 +32,42 @@
                     </button>
                     <div class="filter-options" id="options-rating"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="familia">
-                        Familia
+                    <button class="filter-toggle" data-filter="familia">Familia
                         <span class="filter-badge" id="badge-familia" hidden></span>
                     </button>
                     <div class="filter-options" id="options-familia"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="ocasion">
-                        Ocasión
+                    <button class="filter-toggle" data-filter="ocasion">Ocasión
                         <span class="filter-badge" id="badge-ocasion" hidden></span>
                     </button>
                     <div class="filter-options" id="options-ocasion"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="estilo">
-                        Estilo
+                    <button class="filter-toggle" data-filter="estilo">Estilo
                         <span class="filter-badge" id="badge-estilo" hidden></span>
                     </button>
                     <div class="filter-options" id="options-estilo"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="genero">
-                        Género
+                    <button class="filter-toggle" data-filter="genero">Género
                         <span class="filter-badge" id="badge-genero" hidden></span>
                     </button>
                     <div class="filter-options" id="options-genero"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="temporada">
-                        Temporada
+                    <button class="filter-toggle" data-filter="temporada">Temporada
                         <span class="filter-badge" id="badge-temporada" hidden></span>
                     </button>
                     <div class="filter-options" id="options-temporada"></div>
                 </div>
-
                 <div class="filter-group">
-                    <button class="filter-toggle" data-filter="notas">
-                        Tipo de Nota
+                    <button class="filter-toggle" data-filter="notas">Tipo de Nota
                         <span class="filter-badge" id="badge-notas" hidden></span>
                     </button>
                     <div class="filter-options" id="options-notas"></div>
                 </div>
-
                 <button id="clear-filters" class="clear-filters hidden">Limpiar filtros</button>
             </div>
 
@@ -90,24 +80,75 @@
             </div>
         </nav>
 
-        <main class="main-content">
-            <div id="canvas-container"></div>
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
-            <div id="cascade-menu" class="cascade-menu hidden">
-                <div class="cascade-header">
-                    <button id="close-cascade" class="close-cascade-btn">×</button>
-                    <span id="cascade-perfume-name"></span>
+        <aside class="info-panel" id="info-panel">
+            <button class="mobile-toggle mobile-toggle--info" id="toggle-info-panel" title="Info">ℹ️</button>
+            <div class="info-panel__header">
+                <h2 class="info-panel__title">Detalle del Perfume</h2>
+                <button class="info-panel__close" id="close-info-panel">×</button>
+            </div>
+            <div id="info-panel__content" class="info-panel__content"></div>
+        </aside>
+
+        <div class="info-panel-overlay" id="info-panel-overlay"></div>
+
+        <main class="main-content" id="main-content">
+            <div class="dashboard-header">
+                <div class="dashboard-perfume-selector">
+                    <select id="dashboard-perfume-select"></select>
                 </div>
-                <div id="cascade-content" class="cascade-content"></div>
+                <div class="dashboard-quick-stats" id="dashboard-quick-stats"></div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-row">
+                    <div class="chart-card chart-card--radar">
+                        <div class="chart-card__title">ADN del Perfume</div>
+                        <div id="chart-radar" class="chart-container"></div>
+                    </div>
+                    <div class="chart-card chart-card--thermo">
+                        <div class="chart-card__title">Termómetros Emocionales</div>
+                        <div id="chart-thermo" class="chart-container"></div>
+                    </div>
+                    <div class="chart-card chart-card--treemap">
+                        <div class="chart-card__title">Composición</div>
+                        <div id="chart-treemap" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-row">
+                    <div class="chart-card chart-card--timeline">
+                        <div class="chart-card__title">Evolución Temporal</div>
+                        <div id="chart-timeline" class="chart-container"></div>
+                    </div>
+                    <div class="chart-card chart-card--scatter">
+                        <div class="chart-card__title">Galaxia de Perfumes</div>
+                        <div id="chart-scatter" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-row dashboard-row--main">
+                    <div class="chart-card chart-card--graph3d">
+                        <div class="chart-card__title">Grafo 3D</div>
+                        <div id="chart-3d-container" class="chart-container chart-container--3d"></div>
+                    </div>
+                    <div class="chart-card chart-card--recommender">
+                        <div class="chart-card__title">Recomendador Visual</div>
+                        <div class="recommender-subtitle">Perfumes similares basados en perfil olfativo</div>
+                        <div id="chart-recommender" class="chart-container chart-container--recommender"></div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="data/perfumes.js"></script>
     <script src="src/scene.js"></script>
-    <script src="src/cascade.js"></script>
+    <script src="src/dashboard.js"></script>
     <script src="src/app.js"></script>
 </body>
 </html>

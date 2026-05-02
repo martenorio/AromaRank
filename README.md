@@ -1,18 +1,34 @@
 # Fragrance Graph 3D
 
-Visualizador 3D de perfumes en grafo interactivo construido con **Three.js**. Explora perfumes a través de sus notas olfativas representadas como nodos en un espacio tridimensional.
+Dashboard interactivo de perfumes con visualización 3D y gráficos analíticos construido con **Three.js** y **Apache ECharts**.
 
 ![Three.js](https://img.shields.io/badge/three.js-r128-9cf)
+![ECharts](https://img.shields.io/badge/echarts-5.4-blue)
 ![JavaScript](https://img.shields.io/badge/javascript-es6-f7df1e)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## Vista previa
 
-Un grafo 3D donde:
-- **Nodo central**: Representa el perfume seleccionado (icosaedro púrpura)
-- **Nodos periféricos**: Cada nota olfativa con color según su tipo y tamaño proporcional a su porcentaje
-- **Líneas conectoras**: Unen el perfume con cada una de sus notas
-- **Etiquetas**: Muestran el nombre de la nota y su porcentaje de intensidad
+Dashboard con múltiples visualizaciones:
+
+| Gráfico | Descripción |
+|---------|-------------|
+| **ADN (Radar)** | Perfil sensorial: frescura, dulzura, calidez, intensidad, elegancia, sensualidad |
+| **Termómetros** | Barras horizontales con emojis de cada dimensión emocional |
+| **Treemap** | Composición del perfume por notas (tamaño = porcentaje, color = tipo) |
+| **Timeline** | Evolución temporal de las notas (salida → corazón → fondo) en 12 horas |
+| **Galaxia** | Scatter de todos los perfumes (X=frescura, Y=calidez, tamaño=rating, color=familia) |
+| **Grafo 3D** | Perfume central con nodos de notas conectados por líneas |
+| **Recomendador** | Perfumes similares basados en similitud de coseno del vector perfil |
+
+## Panel de Información (Cascade Menu)
+
+Al seleccionar un perfume se actualiza automáticamente el **panel lateral derecho** (botón ℹ️) con:
+- Imagen del perfume, nombre, marca, año y rating
+- Descripción completa
+- Tags (familia, género, ocasión, estilo, temporada)
+- Estadísticas (concentración, longevidad, proyección, sillage)
+- Notas olfativas agrupadas por nivel (Salida → Corazón → Fondo) con color, % y descripción
 
 ## Instalación
 
@@ -53,55 +69,40 @@ El servidor se inicia en `http://localhost:3000`.
 
 ```
 graph-3d-fragance/
-├── index.html              # Página principal
-├── styles.css              # Estilos de la interfaz
+├── index.html              # Dashboard principal con grid de gráficos
+├── styles.css              # Estilos del dashboard
 ├── server.js               # Servidor estático Node.js
 ├── package.json            # Configuración del proyecto
 ├── data/
-│   └── perfumes.js         # Datos de perfumes y configuración
+│   └── perfumes.js         # Datos + métricas derivadas (sensaciones, vectorPerfil, scores)
 ├── src/
-│   ├── scene.js            # Motor 3D con Three.js
-│   ├── app.js              # Lógica de filtros y UI
-│   └── cascade.js          # Menú de detalles del perfume
+│   ├── scene.js            # Motor 3D con Three.js (panel del dashboard)
+│   ├── dashboard.js        # Gráficos ECharts (Radar, Thermo, Treemap, Timeline, Scatter, Recomendador)
+│   └── app.js              # Filtros, búsqueda y coordinación entre sidebar y dashboard
 ├── sistema_perfumes.txt    # Especificaciones del sistema
-├── catalogo_tags_perfumes.csv # Catálogo de tags disponibles
-├── README.md               # Este archivo
+├── catalogo_tags_perfumes.csv # Catálogo de tags
 └── docs/
     └── ARCHITECTURE.md     # Documentación técnica
 ```
 
 ## Datos del Perfume
 
-Cada perfume en `data/perfumes.js` incluye:
+Cada perfume incluye métricas derivadas calculadas automáticamente:
 
 ```javascript
 {
-  id: 1,
-  nombre: 'Bleu Intense',
-  marca: 'Maison Fictice',
-  familia: 'amaderado',
-  ocasion: ['oficina', 'diario'],
-  estilo: ['elegante', 'sofisticado'],
-  genero: 'masculino',
-  temporada: ['primavera', 'otono'],
-  rating: 4,                    // 1-5 estrellas
-  year: 2023,
-  concentracion: 'eau de parfum',
-  description: 'Descripción...',
-  longevidad: 'alta',
-  proyeccion: 'media',
-  sillage: 'moderado',
-  imagen: 'url-imagen',
-  notas: [
-    {
-      nombre: 'bergamota',
-      subtipo: 'citrico',
-      nivel: 'top',
-      porcentaje: 25,
-      descripcion: 'Frescura vibrante...'
-    }
-  ]
+  // Datos base
+  id: 1, nombre: 'Bleu Intense', marca: 'Maison Fictice',
+  familia: 'amaderado', rating: 4, notas: [...],
+  
+  // Métricas derivadas (calculadas automáticamente)
+  sensaciones: { frescura: 40, dulzura: 5, calidez: 65, intensidad: 70, elegancia: 50, sensualidad: 15 },
+  vectorPerfil: { frescura: 40, dulzura: 5, calidez: 65, intensidad: 70 },
+  longevityScore: 5,    // 1-5
+  projectionScore: 3,   // 1-5
+  massAppeal: 4         // 1-5
 }
+```
 ```
 
 ## Tipos de Notas y Colores
@@ -130,11 +131,27 @@ Cada perfume en `data/perfumes.js` incluye:
 
 ## Tecnologías
 
-- **Three.js r128** - Renderizado 3D
+- **Three.js r128** - Renderizado 3D del grafo
 - **OrbitControls** - Controles de cámara interactivos
+- **Apache ECharts 5.4** - Radar, barras, treemap, líneas, scatter
 - **Vanilla JavaScript** - Sin frameworks
 - **Node.js** - Servidor de archivos estáticos
-- **Canvas API** - Generación de etiquetas de texto como sprites
+- **Canvas API** - Generación de etiquetas de texto como sprites (Three.js)
+
+## Métricas Derivadas
+
+Las siguientes métricas se calculan automáticamente a partir de las notas:
+
+| Métrica | Fórmula |
+|---------|---------|
+| **Frescura** | % de notas cítricas + acuáticas + verdes |
+| **Dulzura** | % de notas gourmand + frutales |
+| **Calidez** | % de notas madera + resinas + especias |
+| **Intensidad** | Proporción de notas base + middle vs total |
+| **Elegancia** | % floral + resina + madera (pesos ajustados) |
+| **Sensualidad** | % gourmand + animalico + resina |
+| **Vector Perfil** | {frescura, dulzura, calidez, intensidad} para similitud |
+| **Similitud** | Coseno entre vectores de perfil (0-1) |
 
 ## Agregar Nuevos Perfumes
 
